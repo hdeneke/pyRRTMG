@@ -1,0 +1,89 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module _rrtmg ! in 
+    interface  ! in :_rrtmg
+        subroutine driver(nbndlw,nbndsw,naerec,ncol,nlay,icld,permuteseed_sw,permuteseed_lw,irng,idrv,cpdair,play,plev,tlay,tlev,tsfc,h2ovmr,o3vmr,co2vmr,ch4vmr,n2ovmr,o2vmr,cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr,aldif,aldir,asdif,asdir,emis,coszen,adjes,dyofyr,scon,inflgsw,inflglw,iceflgsw,iceflgslw,liqflgsw,liqflglw,tauc_sw,tauc_lw,cldfrac,ssac_sw,asmc_sw,fsfc_sw,ciwp,clwp,reic,relq,tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,tauaer_lw,swuflx,swdflx,swhr,swuflxc,swdflxc,swhrc,uflx,dflx,hr,uflxc,dflxc,hrc,duflx_dt,duflxc_dt) ! in :_rrtmg:_rrtmg.f90
+            use rrtmg_lw_rad, only: rrtmg_lw
+            use mcica_subcol_gen_lw, only: mcica_subcol_lw
+            use rrtmg_sw_init, only: rrtmg_sw_ini
+            use mcica_subcol_gen_sw, only: mcica_subcol_sw
+            use parkind, only: im=>kind_im
+            use rrtmg_lw_init, only: rrtmg_lw_ini
+            use rrtmg_sw_rad, only: rrtmg_sw
+            integer(kind=im), optional,intent(in),check(shape(emis,1)==nbndlw),depend(emis) :: nbndlw=shape(emis,1)
+            integer(kind=im), optional,intent(in),check(shape(tauc_sw,0)==nbndsw),depend(tauc_sw) :: nbndsw=shape(tauc_sw,0)
+            integer(kind=im), optional,intent(in),check(shape(ecaer_sw,2)==naerec),depend(ecaer_sw) :: naerec=shape(ecaer_sw,2)
+            integer(kind=im), optional,intent(in),check(shape(play,0)==ncol),depend(play) :: ncol=shape(play,0)
+            integer(kind=im), optional,intent(in),check(shape(play,1)==nlay),depend(play) :: nlay=shape(play,1)
+            integer(kind=im) intent(inout) :: icld
+            integer(kind=im) intent(in) :: permuteseed_sw
+            integer(kind=im) intent(in) :: permuteseed_lw
+            integer(kind=im) intent(inout) :: irng
+            integer(kind=im) intent(in) :: idrv
+            real(kind=8) intent(in) :: cpdair
+            real(kind=8) dimension(ncol,nlay),intent(in) :: play
+            real(kind=8) dimension(ncol,nlay + 1),intent(in),depend(ncol,nlay) :: plev
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: tlay
+            real(kind=8) dimension(ncol,nlay + 1),intent(in),depend(ncol,nlay) :: tlev
+            real(kind=8) dimension(ncol),intent(in),depend(ncol) :: tsfc
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: h2ovmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: o3vmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: co2vmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: ch4vmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: n2ovmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: o2vmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: cfc11vmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: cfc12vmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: cfc22vmr
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: ccl4vmr
+            real(kind=8) dimension(ncol),intent(in),depend(ncol) :: aldif
+            real(kind=8) dimension(ncol),intent(in),depend(ncol) :: aldir
+            real(kind=8) dimension(ncol),intent(in),depend(ncol) :: asdif
+            real(kind=8) dimension(ncol),intent(in),depend(ncol) :: asdir
+            real(kind=8) dimension(ncol,nbndlw),intent(in),depend(ncol) :: emis
+            real(kind=8) dimension(ncol),intent(in),depend(ncol) :: coszen
+            real(kind=8) intent(in) :: adjes
+            integer(kind=im) intent(in) :: dyofyr
+            real(kind=8) intent(in) :: scon
+            integer(kind=im) intent(in) :: inflgsw
+            integer(kind=im) intent(in) :: inflglw
+            integer(kind=im) intent(in) :: iceflgsw
+            integer(kind=im) intent(in) :: iceflgslw
+            integer(kind=im) intent(in) :: liqflgsw
+            integer(kind=im) intent(in) :: liqflglw
+            real(kind=8) dimension(nbndsw,ncol,nlay),intent(in),depend(ncol,nlay) :: tauc_sw
+            real(kind=8) dimension(nbndlw,ncol,nlay),intent(in),depend(nbndlw,ncol,nlay) :: tauc_lw
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: cldfrac
+            real(kind=8) dimension(nbndsw,ncol,nlay),intent(in),depend(nbndsw,ncol,nlay) :: ssac_sw
+            real(kind=8) dimension(nbndsw,ncol,nlay),intent(in),depend(nbndsw,ncol,nlay) :: asmc_sw
+            real(kind=8) dimension(nbndsw,ncol,nlay),intent(in),depend(nbndsw,ncol,nlay) :: fsfc_sw
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: ciwp
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: clwp
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: reic
+            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: relq
+            real(kind=8) dimension(ncol,nlay,nbndsw),intent(in),depend(ncol,nlay,nbndsw) :: tauaer_sw
+            real(kind=8) dimension(ncol,nlay,nbndsw),intent(in),depend(ncol,nlay,nbndsw) :: ssaaer_sw
+            real(kind=8) dimension(ncol,nlay,nbndsw),intent(in),depend(ncol,nlay,nbndsw) :: asmaer_sw
+            real(kind=8) dimension(ncol,nlay,naerec),intent(in),depend(ncol,nlay) :: ecaer_sw
+            real(kind=8) dimension(ncol,nlay,nbndlw),intent(in),depend(ncol,nlay,nbndlw) :: tauaer_lw
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: swuflx
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: swdflx
+            real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: swhr
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: swuflxc
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: swdflxc
+            real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: swhrc
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: uflx
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: dflx
+            real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: hr
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: uflxc
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: dflxc
+            real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: hrc
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: duflx_dt
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: duflxc_dt
+        end subroutine driver
+    end interface 
+end python module _rrtmg
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
