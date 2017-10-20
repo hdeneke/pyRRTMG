@@ -81,6 +81,7 @@ atm['Tlev'] = np.asfortranarray(np.hstack((t0,t1,t2)),dtype=np.float64)
 # build list of RRTMG inputs
 rrtmg_input = [
     0,                  # icld
+    0,                  # iaer
     0,                  # permuteseed_sw
     0,                  # permuteseed_lw
     0,                  # irng

@@ -16,7 +16,7 @@ vmr_defaults = {
 }
 
 _rrtmg_inputs = [
-    "icld", "permuteseed_sw", "permuteseed_lw", 
+    "icld", "iaer", "permuteseed_sw", "permuteseed_lw", 
     "irng", "idrv", "cpdair", 
     "play", "plev",
     "tlay", "tlev", "tsfc",

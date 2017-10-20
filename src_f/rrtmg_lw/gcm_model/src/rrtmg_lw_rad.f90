@@ -468,6 +468,7 @@
 
 !  Prepare atmospheric profile from GCM for use in RRTMG, and define
 !  other input parameters.  
+
          call inatm (iplon, nlay, icld, iaer, &
               play, plev, tlay, tlev, tsfc, h2ovmr, &
               o3vmr, co2vmr, ch4vmr, n2ovmr, o2vmr, cfc11vmr, cfc12vmr, &
@@ -502,6 +503,7 @@
                       rat_n2oco2, rat_n2oco2_1, rat_o3co2, rat_o3co2_1, &
                       selffac, selffrac, indself, forfac, forfrac, indfor, &
                       minorfrac, scaleminor, scaleminorn2, indminor)
+
 !  Calculate the gaseous optical depths and Planck fractions for 
 !  each longwave spectral band.
 

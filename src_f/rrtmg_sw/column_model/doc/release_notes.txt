@@ -1,12 +1,83 @@
-!     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/doc/release_notes.txt,v $
-!     author:    $Author: mike $
-!     revision:  $Revision: 1.9 $
-!     created:   $Date: 2009/05/22 22:22:21 $
+!     path:      $Source$
+!     author:    $Author: miacono $
+!     revision:  $Revision: 30822 $
+!     created:   $Date: 2016-12-29 15:53:24 -0500 (Thu, 29 Dec 2016) $
 !------------------------------------------------------------------------
 
 RRTMG_SW Release Notes
 
 NOTE: ** CVS rtags can't accept "." in strings, substitute "_"
+
+
+December 29, 2016:
+
+	Release_4_0
+
+        Added new solar variability options based on Lean NRLSSI2 model. 
+        Solar variability method is selected with input flag isolvar and
+        options include using the internal solar constant consistent with
+        the Lean model (1360.85 Wm-2) with no solar cycle variability,
+        applying the mean of Solar Cycles 13-24 to represent averaged
+        facular brightening and sunspot blocking effects over time, or 
+        supplying specific facular and sunspot indices to represent
+        solar variability over specific solar cycles over time. Options
+        that use the averaged solar cycle can be scaled to a different
+        solar constant. Additional capability is provided to adjust the 
+        amplitude of the averaged solar cycle or to scale the solar
+        constant by spectral band. The extraterrestrial solar irradiance
+        specification that was used in RRTMG_SW_v3.91 and earlier remains
+        an available option. 
+
+        Publicly released on AER RT web site in December 2016.
+
+
+September 2, 2016:
+
+	Release_3_91
+
+        All source code modules were modified to replace the original copyright
+        statement with a new BSD 3-clause software license (at the request
+        of ECMWF).  Additional minor changes include:
+        - Changed declaration of variable cinp in subroutine readprof in file
+        rrtmg_sw.1col.f90 from implicit real to character*3. 
+        - Fixed integer kind type problem in file rrtmg_sw_read_nc.f90 by 
+        replacing all numeral "1" arguments to nf90_get_var to "1_im" to 
+        prevent errors on some compilers. 
+        - Fixed integer kind type problem in file mcica_random_numbers.f90 by 
+        replacing several numeral "1" arguments to the function "mod" with "1_im" 
+        at lines 199 and 220 to prevent errors on some compilers. 
+
+        Internal release only.
+
+
+December 27, 2013:
+
+	Release_3_9
+
+        Replaced Hu & Stamnes look up tables of extinction coefficients, 
+        single scattering albedos and asymmetry parameters for LIQFLAG=1
+        cloud option to remove small discontinuities in the original tables.
+        New coefficients were derived using Mie scattering calculations with
+        finer spectral resolution based on the original Hu & Stamnes method.
+        The impact on fluxes is of order 0.5 Wm-2 or less in profiles with
+        liquid cloud. Also added bug fix related to initialization of aerosol
+        optical properties for the ECMWF aerosol option (iaer=6). 
+
+        Publicly released on AER RT web site in December 2013.
+
+        - Look up tables of extinction coeffients, single scattering albedos,
+          and asymmetry parameters were regenerated and replaced for the 
+          Hu & Stamnes (LIQFLAG=1) cloud option. The new tables were derived
+          using Mie calculations at finer resolution than the original method.
+          The updated tables are consistent with those used in the version of
+          this model applied to the CIRC (Continual Intercomparision of 
+          Radiation Codes) project. 
+        - A correction was applied to the ECMWF aerosol input option (iaer=6)
+          to fix the initialization and specification of the aerosol optical
+          properties for this method.
+        - Instances of the 'float' intrinsic function in the code were replaced
+          with the 'real' function in several source modules for consistency
+          with the specified real kind type used in the code.  
 
 
 May 22, 2009:

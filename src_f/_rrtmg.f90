@@ -1,6 +1,6 @@
 ! see _rrtm_radiation for the python that prepares these arguments...
 subroutine driver &
-    (nbndlw, nbndsw, naerec, ncol, nlay, icld, &
+    (nbndlw, nbndsw, naerec, ncol, nlay, icld, iaer, &
     permuteseed_sw, permuteseed_lw, irng, idrv, cpdair, play, plev, &
     tlay, tlev, tsfc, h2ovmr, o3vmr, co2vmr, ch4vmr, n2ovmr, &
     o2vmr, cfc11vmr, cfc12vmr, cfc22vmr, ccl4vmr, aldif, aldir, asdif, &
@@ -30,6 +30,7 @@ subroutine driver &
     integer(kind=im), intent(in) :: ncol
     integer(kind=im), intent(in) :: nlay
     integer(kind=im), intent(inout) :: icld
+    integer(kind=im), intent(inout) :: iaer
     integer(kind=im), intent(in) :: permuteseed_sw
     integer(kind=im), intent(in) :: permuteseed_lw
     integer(kind=im), intent(inout) :: irng
@@ -127,11 +128,11 @@ subroutine driver &
                        ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, relqmcl_lw, taucmcl_lw)
     call rrtmg_sw_ini(cpdair)
     call rrtmg_lw_ini(cpdair)
-    call rrtmg_sw(ncol    ,nlay    ,icld    , &
+    call rrtmg_sw(ncol    ,nlay    ,icld    , iaer, &
              play    ,plev    ,tlay    ,tlev    ,tsfc   , &
              h2ovmr , o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr ,o2vmr , &
              asdir   ,asdif   ,aldir   ,aldif   , &
-             coszen  ,adjes   ,dyofyr  ,scon    , &
+             coszen  ,adjes   ,dyofyr  ,scon, 0, &
              inflgsw ,iceflgsw,liqflgsw,cldfmcl_sw , &
              taucmcl_sw ,ssacmcl_sw ,asmcmcl_sw ,fsfcmcl_sw , &
              ciwpmcl_sw ,clwpmcl_sw ,reicmcl_sw ,relqmcl_sw , &

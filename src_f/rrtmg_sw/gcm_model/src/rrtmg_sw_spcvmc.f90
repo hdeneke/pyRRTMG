@@ -1,19 +1,38 @@
-!     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/rrtmg_sw_spcvmc.f90,v $
-!     author:    $Author: mike $
-!     revision:  $Revision: 1.5 $
-!     created:   $Date: 2009/05/22 22:22:22 $
+!     path:      $Source$
+!     author:    $Author: miacono $
+!     revision:  $Revision: 30822 $
+!     created:   $Date: 2016-12-29 15:53:24 -0500 (Thu, 29 Dec 2016) $
 
       module rrtmg_sw_spcvmc
 
-!  --------------------------------------------------------------------------
-! |                                                                          |
-! |  Copyright 2002-2009, Atmospheric & Environmental Research, Inc. (AER).  |
-! |  This software may be used, copied, or redistributed as long as it is    |
-! |  not sold and this copyright notice is reproduced on each copy made.     |
-! |  This model is provided as is without any express or implied warranties. |
-! |                       (http://www.rtweb.aer.com/)                        |
-! |                                                                          |
-!  --------------------------------------------------------------------------
+!----------------------------------------------------------------------------
+! Copyright (c) 2002-2016, Atmospheric & Environmental Research, Inc. (AER)
+! All rights reserved.
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions are met:
+!  * Redistributions of source code must retain the above copyright
+!    notice, this list of conditions and the following disclaimer.
+!  * Redistributions in binary form must reproduce the above copyright
+!    notice, this list of conditions and the following disclaimer in the
+!    documentation and/or other materials provided with the distribution.
+!  * Neither the name of Atmospheric & Environmental Research, Inc., nor
+!    the names of its contributors may be used to endorse or promote products
+!    derived from this software without specific prior written permission.
+!
+! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+! AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+! IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+! ARE DISCLAIMED. IN NO EVENT SHALL ATMOSPHERIC & ENVIRONMENTAL RESEARCH, INC., 
+! BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+! CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+! SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+! CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+! THE POSSIBILITY OF SUCH DAMAGE.
+!                        (http://www.rtweb.aer.com/)                        
+!----------------------------------------------------------------------------
 
 ! ------- Modules -------
 
@@ -36,6 +55,8 @@
              pavel, tavel, pz, tz, tbound, palbd, palbp, &
              pcldfmc, ptaucmc, pasycmc, pomgcmc, ptaormc, &
              ptaua, pasya, pomga, prmu0, coldry, wkl, adjflux, &
+             isolvar, svar_f, svar_s, svar_i, &
+             svar_f_bnd, svar_s_bnd, svar_i_bnd, &
              laytrop, layswtch, laylow, jp, jt, jt1, &
              co2mult, colch4, colco2, colh2o, colmol, coln2o, colo2, colo3, &
              fac00, fac01, fac10, fac11, &
@@ -118,6 +139,14 @@
                                                                !   Dimensions: (nlayers)
       real(kind=rb), intent(in) :: adjflux(:)                  ! Earth/Sun distance adjustment
                                                                !   Dimensions: (jpband)
+! Solar variability
+      integer(kind=im), intent(in) :: isolvar                  ! Flag for solar variability method
+      real(kind=rb), intent(in) :: svar_f                      ! Solar variability facular multiplier
+      real(kind=rb), intent(in) :: svar_s                      ! Solar variability sunspot multiplier
+      real(kind=rb), intent(in) :: svar_i                      ! Solar variability baseline irradiance multiplier
+      real(kind=rb), intent(in) :: svar_f_bnd(jpband)          ! Solar variability facular multiplier (by band)
+      real(kind=rb), intent(in) :: svar_s_bnd(jpband)          ! Solar variability sunspot multiplier (by band)
+      real(kind=rb), intent(in) :: svar_i_bnd(jpband)          ! Solar variability baseline irradiance multiplier (by band)
 
       real(kind=rb), intent(in) :: palbd(:)                    ! surface albedo (diffuse)
                                                                !   Dimensions: (nbndsw)
@@ -203,6 +232,7 @@
 !      real(kind=rb), intent(out) :: pvsfu(:)
 
 ! ------- Local -------
+
       logical :: lrtchkclr(nlayers),lrtchkcld(nlayers)
 
       integer(kind=im)  :: klev
@@ -242,6 +272,7 @@
 !      real(kind=rb) :: zsflxzen(16)
       real(kind=rb) :: ztaug(nlayers,ngptsw), ztaur(nlayers,ngptsw)
       real(kind=rb) :: zsflxzen(ngptsw)
+      real(kind=rb) :: ssi(ngptsw)
 
 ! Arrays from rrtmg_sw_vrtqdr routine
 
@@ -289,10 +320,12 @@
                      laytrop, jp, jt, jt1, &
                      fac00, fac01, fac10, fac11, &
                      selffac, selffrac, indself, forfac, forfrac, indfor, &
-                     zsflxzen, ztaug, ztaur)
+                     isolvar, svar_f, svar_s, svar_i, &
+                     svar_f_bnd, svar_s_bnd, svar_i_bnd, &
+                     ssi, zsflxzen, ztaug, ztaur)
 
 ! Top of shortwave spectral band loop, jb = 16 -> 29; ibm = 1 -> 14
-! AFTER HERE
+
       do jb = ib1, ib2
          ibm = jb-15
          igt = ngc(ibm)
@@ -312,11 +345,16 @@
             iw = iw+1
 
 ! Apply adjustment for correct Earth/Sun distance and zenith angle to incoming solar flux
-!+++ CliMT: zenith angle adjustment already included in solin input!
-!            zincflx(iw) = adjflux(jb) * zsflxzen(iw) * prmu0
-            zincflx(iw) = adjflux(jb) * zsflxzen(iw)
-!--- CliMT
-!             zincflux = zincflux + adjflux(jb) * zsflxzen(iw) * prmu0           ! inactive
+! No solar variability and no solar cycle
+            if (isolvar .lt. 0) then 
+               zincflx(iw) = adjflux(jb) * zsflxzen(iw) * prmu0
+!               zincflux = zincflux + adjflux(jb) * zsflxzen(iw) * prmu0           ! inactive
+            endif
+! Solar variability with averaged or specified solar cycle
+            if (isolvar .ge. 0) then 
+               zincflx(iw) = adjflux(jb) * ssi(iw) * prmu0
+            endif
+
 ! Compute layer reflectances and transmittances for direct and diffuse sources, 
 ! first clear then cloudy
 
@@ -449,6 +487,7 @@
                endif
 !   /\/\/\ Above code only needed for unscaled direct beam calculation
 
+
 ! Delta scaling - clear   
                zf = zgcc(jk) * zgcc(jk)
                zwf = zomcc(jk) * zf
@@ -496,7 +535,7 @@
             call reftra_sw (klev, &
                             lrtchkcld, zgco, prmu0, ztauo, zomco, &
                             zrefo, zrefdo, ztrao, ztrado)
-! AFTER HERE
+
             do jk=1,klev
 
 ! Combine clear and cloudy contributions for total sky
@@ -513,11 +552,10 @@
 
 ! Clear
 !                zdbtmc = exp(-ztauc(jk) / prmu0)
-! AFTER HERE
+
 ! Use exponential lookup table for transmittance, or expansion of 
 ! exponential for low tau
                ze1 = ztauc(jk) / prmu0
-
                if (ze1 .le. od_lo) then
                   zdbtmc = 1._rb - ze1 + 0.5_rb * ze1 * ze1
                else
@@ -525,7 +563,7 @@
                   itind = tblint * tblind + 0.5_rb
                   zdbtmc = exp_tbl(itind)
                endif
-! BEFORE HERE
+
                zdbtc(jk) = zdbtmc
                ztdbtc(jk+1) = zdbtc(jk)*ztdbtc(jk)
 
@@ -549,7 +587,7 @@
             enddo           
                  
 ! Vertical quadrature for clear-sky fluxes
-!! BEFORE HERE
+
             call vrtqdr_sw(klev, iw, &
                            zrefc, zrefdc, ztrac, ztradc, &
                            zdbtc, zrdndc, zrupc, zrupdc, ztdbtc, &

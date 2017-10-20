@@ -516,7 +516,6 @@
 
 ! Process longwave output from band for total and clear streams.
 ! Calculate upward, downward, and net flux.
-
          do lev = nlayers, 0, -1
             uflux(lev) = urad(lev)*wtdiff
             dflux(lev) = drad(lev)*wtdiff
@@ -554,7 +553,6 @@
       totuclfl(0) = totuclfl(0) * fluxfac
       totdclfl(0) = totdclfl(0) * fluxfac
       fnetc(0) = totuclfl(0) - totdclfl(0)
-      
 
 ! Calculate fluxes at model levels
       do lev = 1, nlayers

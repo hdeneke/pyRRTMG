@@ -1,7 +1,7 @@
-!     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/mcica_random_numbers.f90,v $
-!     author:    $Author: mike $
-!     revision:  $Revision: 1.3 $
-!     created:   $Date: 2008/08/29 17:59:07 $
+!     path:      $Source$
+!     author:    $Author: miacono $
+!     revision:  $Revision: 29812 $
+!     created:   $Date: 2016-09-02 17:01:49 -0400 (Fri, 02 Sep 2016) $
 !
 
 ! Fortran-95 implementation of the Mersenne Twister 19937, following 
@@ -196,7 +196,7 @@ contains
     nFirstLoop = max(blockSize, size(seed))
     do k = 1, nFirstLoop
        i = mod(k + nWraps, blockSize)
-       j = mod(k - 1,      size(seed))
+       j = mod(k - 1_im,      size(seed))
        if(i == 0) then
          twister%state(i) = twister%state(blockSize - 1)
          twister%state(1) = ieor(twister%state(1),                                 &
@@ -217,7 +217,7 @@ contains
     !
     ! Walk through the state array, beginning where we left off in the block above
     ! 
-    do i = mod(nFirstLoop, blockSize) + nWraps + 1, blockSize - 1
+    do i = mod(nFirstLoop, blockSize) + nWraps + 1_im, blockSize - 1_im
       twister%state(i) = ieor(twister%state(i),                                 &
                               ieor(twister%state(i-1),                          & 
                                    ishft(twister%state(i-1), -30_im)) * 1566083941_im) - i ! Non-linear
