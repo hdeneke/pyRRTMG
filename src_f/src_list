@@ -65,6 +65,7 @@ rrtmg_lw/gcm_model/src/mcica_subcol_gen_lw.f90
 rrtmg_lw/gcm_model/src/rrtmg_lw_taumol.f90
 rrtmg_lw/gcm_model/src/rrtmg_lw_setcoef.f90
 rrtmg_lw/gcm_model/src/rrtmg_lw_rtrnmc.f90
+rrtmg_lw/gcm_model/src/rrtmg_lw_rtrn.f90
 rrtmg_lw/gcm_model/src/rrtmg_lw_rtrnmr.f90
 rrtmg_lw/gcm_model/src/rrtmg_lw_k_g.f90
 rrtmg_lw/gcm_model/src/rrtmg_lw_init.f90
