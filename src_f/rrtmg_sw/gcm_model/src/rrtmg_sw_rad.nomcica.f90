@@ -4,7 +4,7 @@
 !     created:   $Date: 2016-12-29 15:53:24 -0500 (Thu, 29 Dec 2016) $
 !
 
-       module rrtmg_sw_rad
+       module rrtmg_sw_rad_nomcica
 
 !----------------------------------------------------------------------------
 ! Copyright (c) 2002-2016, Atmospheric & Environmental Research, Inc. (AER)
@@ -1195,23 +1195,23 @@
 ! Adjust amplitude scaling to be 1.0 at solar min (solcycfrac=0.0229),
 ! to be the requested indsolvar at solar max (solcycfrac=0.3817), and
 ! to vary between those values at other solcycfrac. 
-         if (indsolvar(1).ne.1.0_rb.or.indsolvar(2).ne.1.0_rb) then 
-            if (solcycfrac.ge.0.0_rb.and.solcycfrac.lt.0.0229_rb) then
-               wgt = (solcycfrac+1.0_rb-0.3817_rb)/(1.0229_rb-0.3817_rb)
-               indsolvar(1) = indsolvar(1) + wgt * (1.0_rb-indsolvar(1))
-               indsolvar(2) = indsolvar(2) + wgt * (1.0_rb-indsolvar(2))
-            endif
-            if (solcycfrac.ge.0.0229_rb.and.solcycfrac.le.0.3817_rb) then
-               wgt = (solcycfrac-0.0229_rb)/(0.3817_rb-0.0229_rb)
-               indsolvar(1) = 1.0_rb + wgt * (indsolvar(1)-1.0_rb)
-               indsolvar(2) = 1.0_rb + wgt * (indsolvar(2)-1.0_rb)
-            endif
-            if (solcycfrac.gt.0.3817_rb.and.solcycfrac.le.1.0_rb) then
-               wgt = (solcycfrac-0.3817_rb)/(1.0229_rb-0.3817_rb)
-               indsolvar(1) = indsolvar(1) + wgt * (1.0_rb-indsolvar(1))
-               indsolvar(2) = indsolvar(2) + wgt * (1.0_rb-indsolvar(2))
-            endif
-         endif
+      ! if (indsolvar(1).ne.1.0_rb.or.indsolvar(2).ne.1.0_rb) then 
+      !       if (solcycfrac.ge.0.0_rb.and.solcycfrac.lt.0.0229_rb) then
+      !          wgt = (solcycfrac+1.0_rb-0.3817_rb)/(1.0229_rb-0.3817_rb)
+      !          indsolvar(1) = indsolvar(1) + wgt * (1.0_rb-indsolvar(1))
+      !          indsolvar(2) = indsolvar(2) + wgt * (1.0_rb-indsolvar(2))
+      !       endif
+      !       if (solcycfrac.ge.0.0229_rb.and.solcycfrac.le.0.3817_rb) then
+      !          wgt = (solcycfrac-0.0229_rb)/(0.3817_rb-0.0229_rb)
+      !          indsolvar(1) = 1.0_rb + wgt * (indsolvar(1)-1.0_rb)
+      !          indsolvar(2) = 1.0_rb + wgt * (indsolvar(2)-1.0_rb)
+      !       endif
+      !       if (solcycfrac.gt.0.3817_rb.and.solcycfrac.le.1.0_rb) then
+      !          wgt = (solcycfrac-0.3817_rb)/(1.0229_rb-0.3817_rb)
+      !          indsolvar(1) = indsolvar(1) + wgt * (1.0_rb-indsolvar(1))
+      !          indsolvar(2) = indsolvar(2) + wgt * (1.0_rb-indsolvar(2))
+      !       endif
+      !    endif
 
 ! Set flux adjustment for current Earth/Sun distance (two options).
 ! 1) Use Earth/Sun distance flux adjustment provided by GCM (input as adjes);
@@ -1536,6 +1536,6 @@
 
       end subroutine inatm_sw
 
-      end module rrtmg_sw_rad
+      end module rrtmg_sw_rad_nomcica
 
 
