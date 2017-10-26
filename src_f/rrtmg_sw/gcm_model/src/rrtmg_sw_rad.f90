@@ -615,6 +615,31 @@
 
       do iplon = 1, ncol
 
+! Cosine of the solar zenith angle 
+! If sun is below horizon, skip iplon loop
+
+         cossza = coszen(iplon)
+         if (cossza .lt. zepzen) then
+
+!  Set output arrays to zero
+            do i = 1, nlay+1
+!  Total and clear sky fluxes
+               swuflxc(iplon,i) = 0._rb
+               swdflxc(iplon,i) = 0._rb
+               swuflx(iplon,i) = 0._rb
+               swdflx(iplon,i) = 0._rb
+            enddo
+
+            do i = 1, nlay
+!  Total and clear sky heating rates
+               swhrc(iplon,i) = 0._rb
+               swhr(iplon,i) = 0._rb
+            enddo
+
+!  And skip rest of iplon loop
+            cycle
+         endif
+
 ! Prepare atmosphere profile from GCM for use in RRTMG, and define
 ! other input parameters
 
@@ -654,15 +679,6 @@
                          co2mult, colch4, colco2, colh2o, colmol, coln2o, &
                          colo2, colo3, fac00, fac01, fac10, fac11, &
                          selffac, selffrac, indself, forfac, forfrac, indfor)
-
-
-! Cosine of the solar zenith angle 
-!  Prevent using value of zero; ideally, SW model is not called from host model when sun 
-!  is below horizon
-
-         cossza = coszen(iplon)
-         if (cossza .lt. zepzen) cossza = zepzen
-
 
 ! Transfer albedo, cloud and aerosol properties into arrays for 2-stream radiative transfer 
 

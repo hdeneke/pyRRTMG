@@ -586,6 +586,31 @@
 
       do iplon = 1, ncol
 
+! Cosine of the solar zenith angle 
+! If sun is below horizon, skip iplon loop
+
+         cossza = coszen(iplon)
+         if (cossza .lt. zepzen) then
+
+!  Set output arrays to zero
+            do i = 1, nlay+1
+!  Total and clear sky fluxes
+               swuflxc(iplon,i) = 0._rb
+               swdflxc(iplon,i) = 0._rb
+               swuflx(iplon,i) = 0._rb
+               swdflx(iplon,i) = 0._rb
+            enddo
+
+            do i = 1, nlay
+!  Total and clear sky heating rates
+               swhrc(iplon,i) = 0._rb
+               swhr(iplon,i) = 0._rb
+            enddo
+
+!  And skip rest of iplon loop
+            cycle
+         endif
+
 ! Prepare atmosphere profile from GCM for use in RRTMG, and define
 ! other input parameters
 
