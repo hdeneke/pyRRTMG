@@ -658,15 +658,6 @@
                          colo2, colo3, fac00, fac01, fac10, fac11, &
                          selffac, selffrac, indself, forfac, forfrac, indfor)
 
-
-! Cosine of the solar zenith angle 
-!  Prevent using value of zero; ideally, SW model is not called from host model when sun 
-!  is below horizon
-
-         cossza = coszen(iplon)
-         if (cossza .lt. zepzen) cossza = zepzen
-
-
 ! Transfer albedo, cloud and aerosol properties into arrays for 2-stream radiative transfer 
 
 ! Surface albedo
