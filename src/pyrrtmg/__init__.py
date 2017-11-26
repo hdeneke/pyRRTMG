@@ -1,5 +1,7 @@
 import _rrtmg
 
+_rrtmg.init(1005.6)
+
 nbnd_lw = 16 # number of longwave bands
 nbnd_sw = 14 # number of shortwave bands
 
@@ -17,7 +19,7 @@ vmr_defaults = {
 
 _rrtmg_inputs = [
     "icld", "iaer", "permuteseed_sw", "permuteseed_lw", 
-    "irng", "idrv", "cpdair", 
+    "irng", "idrv",
     "play", "plev",
     "tlay", "tlev", "tsfc",
     "h2ovmr", "o3vmr", "co2vmr",
@@ -49,6 +51,6 @@ def calc_flxhr(*args,**kwargs):
     if len(args)==0:
         # Using named arguments
         args = [ kwargs.get(k,None) for k in _rrtmg_inputs ]
-    return dict(zip(_rrtmg_outputs,_rrtmg.driver(*args)))
+    return dict(zip(_rrtmg_outputs,_rrtmg.flxhr(*args)))
 
 

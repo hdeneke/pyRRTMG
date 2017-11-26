@@ -86,7 +86,6 @@ rrtmg_input = [
     0,                  # permuteseed_lw
     0,                  # irng
     0,                  # idrv
-    1005.6,             # Heat capacity of dry air
 ]
 
 # append list of atmospheric fields to RRTMG inputs

@@ -1,7 +1,19 @@
+subroutine init ( cpdair )
+! Modules used
+    use rrtmg_lw_init, only: rrtmg_lw_ini
+    use rrtmg_sw_init, only: rrtmg_sw_ini
+    use parkind, only: rb => kind_rb
+! Inputs
+    real(kind=rb), intent(in) :: cpdair
+
+    call rrtmg_sw_ini(cpdair)
+    call rrtmg_lw_ini(cpdair)
+end subroutine init
+
 ! see _rrtm_radiation for the python that prepares these arguments...
-subroutine driver &
+subroutine flxhr &
     (nbndlw, nbndsw, naerec, ncol, nlay, icld, iaer, &
-    permuteseed_sw, permuteseed_lw, irng, idrv, cpdair, play, plev, &
+    permuteseed_sw, permuteseed_lw, irng, idrv, play, plev, &
     tlay, tlev, tsfc, h2ovmr, o3vmr, co2vmr, ch4vmr, n2ovmr, &
     o2vmr, cfc11vmr, cfc12vmr, cfc22vmr, ccl4vmr, aldif, aldir, asdif, &
     asdir, emis, coszen, adjes, dyofyr, scon, &
@@ -35,7 +47,6 @@ subroutine driver &
     integer(kind=im), intent(in) :: permuteseed_lw
     integer(kind=im), intent(inout) :: irng
     integer(kind=im), intent(in) :: idrv
-    real(kind=rb), intent(in) :: cpdair
     real(kind=rb), intent(in) :: play(ncol,nlay)
     real(kind=rb), intent(in) :: plev(ncol,nlay+1)
     real(kind=rb), intent(in) :: tlay(ncol,nlay)
@@ -118,16 +129,12 @@ subroutine driver &
     real(kind=rb) :: clwpmcl_lw(140,ncol,nlay)
     real(kind=rb) :: reicmcl_lw(ncol,nlay)
     real(kind=rb) :: relqmcl_lw(ncol,nlay)
-    
+
+! Shortwave calculations
     call mcica_subcol_sw(1, ncol, nlay, icld, permuteseed_sw, irng, play, &
                        cldfrac, ciwp, clwp, reic, relq, tauc_sw, ssac_sw, asmc_sw, fsfc_sw, &
                        cldfmcl_sw, ciwpmcl_sw, clwpmcl_sw, reicmcl_sw, relqmcl_sw, &
                        taucmcl_sw, ssacmcl_sw, asmcmcl_sw, fsfcmcl_sw)
-    call mcica_subcol_lw(1, ncol, nlay, icld, permuteseed_lw, irng, play, &
-                       cldfrac, ciwp, clwp, reic, relq, tauc_lw, cldfmcl_lw, &
-                       ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, relqmcl_lw, taucmcl_lw)
-    call rrtmg_sw_ini(cpdair)
-    call rrtmg_lw_ini(cpdair)
     call rrtmg_sw(ncol    ,nlay    ,icld    , iaer, &
              play    ,plev    ,tlay    ,tlev    ,tsfc   , &
              h2ovmr , o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr ,o2vmr , &
@@ -138,6 +145,11 @@ subroutine driver &
              ciwpmcl_sw ,clwpmcl_sw ,reicmcl_sw ,relqmcl_sw , &
              tauaer_sw  ,ssaaer_sw ,asmaer_sw  ,ecaer_sw   , &
              swuflx  ,swdflx  ,swhr    ,swuflxc ,swdflxc ,swhrc)
+
+! Longwave calculations
+    call mcica_subcol_lw(1, ncol, nlay, icld, permuteseed_lw, irng, play, &
+                       cldfrac, ciwp, clwp, reic, relq, tauc_lw, cldfmcl_lw, &
+                       ciwpmcl_lw, clwpmcl_lw, reicmcl_lw, relqmcl_lw, taucmcl_lw)
     call rrtmg_lw(ncol    ,nlay    ,icld    ,idrv    , &
              play    ,plev    ,tlay    ,tlev    ,tsfc    , & 
              h2ovmr  ,o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr  ,o2vmr , &
@@ -148,4 +160,4 @@ subroutine driver &
              lwuflx  ,lwdflx  ,lwhr    ,lwuflxc ,lwdflxc,  lwhrc, &
              lwduflx_dt,lwduflxc_dt )
 
-end subroutine driver
+end subroutine flxhr

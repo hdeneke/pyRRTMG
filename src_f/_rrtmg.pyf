@@ -3,7 +3,13 @@
 
 python module _rrtmg ! in 
     interface  ! in :_rrtmg
-        subroutine driver(nbndlw,nbndsw,naerec,ncol,nlay,icld,iaer,permuteseed_sw,permuteseed_lw,irng,idrv,cpdair,play,plev,tlay,tlev,tsfc,h2ovmr,o3vmr,co2vmr,ch4vmr,n2ovmr,o2vmr,cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr,aldif,aldir,asdif,asdir,emis,coszen,adjes,dyofyr,scon,inflgsw,inflglw,iceflgsw,iceflgslw,liqflgsw,liqflglw,tauc_sw,tauc_lw,cldfrac,ssac_sw,asmc_sw,fsfc_sw,ciwp,clwp,reic,relq,tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,tauaer_lw,swuflx,swdflx,swhr,swuflxc,swdflxc,swhrc,uflx,dflx,hr,uflxc,dflxc,hrc,duflx_dt,duflxc_dt) ! in :_rrtmg:_rrtmg.f90
+        subroutine init(cpdair) ! in :_rrtmg:_rrtmg.f90
+            use rrtmg_lw_init, only: rrtmg_lw_ini
+            use rrtmg_sw_init, only: rrtmg_sw_ini
+            use parkind, only: rb=>kind_rb
+            real(kind=rb) intent(in) :: cpdair
+        end subroutine init
+        subroutine flxhr(nbndlw,nbndsw,naerec,ncol,nlay,icld,iaer,permuteseed_sw,permuteseed_lw,irng,idrv,play,plev,tlay,tlev,tsfc,h2ovmr,o3vmr,co2vmr,ch4vmr,n2ovmr,o2vmr,cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr,aldif,aldir,asdif,asdir,emis,coszen,adjes,dyofyr,scon,inflgsw,inflglw,iceflgsw,iceflgslw,liqflgsw,liqflglw,tauc_sw,tauc_lw,cldfrac,ssac_sw,asmc_sw,fsfc_sw,ciwp,clwp,reic,relq,tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,tauaer_lw,swuflx,swdflx,swhr,swuflxc,swdflxc,swhrc,lwuflx,lwdflx,lwhr,lwuflxc,lwdflxc,lwhrc,lwduflx_dt,lwduflxc_dt) ! in :_rrtmg:_rrtmg.f90
             use rrtmg_lw_rad, only: rrtmg_lw
             use mcica_subcol_gen_lw, only: mcica_subcol_lw
             use rrtmg_sw_init, only: rrtmg_sw_ini
@@ -22,7 +28,6 @@ python module _rrtmg ! in
             integer(kind=im) intent(in) :: permuteseed_lw
             integer(kind=im) intent(inout) :: irng
             integer(kind=im) intent(in) :: idrv
-            real(kind=8) intent(in) :: cpdair
             real(kind=8) dimension(ncol,nlay),intent(in) :: play
             real(kind=8) dimension(ncol,nlay + 1),intent(in),depend(ncol,nlay) :: plev
             real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: tlay
@@ -74,15 +79,15 @@ python module _rrtmg ! in
             real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: swuflxc
             real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: swdflxc
             real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: swhrc
-            real :: uflx
-            real :: dflx
-            real :: hr
-            real :: uflxc
-            real :: dflxc
-            real :: hrc
-            real :: duflx_dt
-            real :: duflxc_dt
-        end subroutine driver
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: lwuflx
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: lwdflx
+            real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: lwhr
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: lwuflxc
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: lwdflxc
+            real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: lwhrc
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: lwduflx_dt
+            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: lwduflxc_dt
+        end subroutine flxhr
     end interface 
 end python module _rrtmg
 
