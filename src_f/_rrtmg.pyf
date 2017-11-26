@@ -74,14 +74,14 @@ python module _rrtmg ! in
             real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: swuflxc
             real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: swdflxc
             real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: swhrc
-            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: uflx
-            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: dflx
-            real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: hr
-            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: uflxc
-            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: dflxc
-            real(kind=8) dimension(ncol,nlay),intent(out),depend(ncol,nlay) :: hrc
-            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: duflx_dt
-            real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: duflxc_dt
+            real :: uflx
+            real :: dflx
+            real :: hr
+            real :: uflxc
+            real :: dflxc
+            real :: hrc
+            real :: duflx_dt
+            real :: duflxc_dt
         end subroutine driver
     end interface 
 end python module _rrtmg

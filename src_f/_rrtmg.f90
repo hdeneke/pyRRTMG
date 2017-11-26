@@ -9,7 +9,7 @@ subroutine driver &
     fsfc_sw, ciwp, clwp, reic, relq, &
     tauaer_sw, ssaaer_sw, asmaer_sw, ecaer_sw, tauaer_lw, &
     swuflx, swdflx, swhr, swuflxc, &
-    swdflxc, swhrc, uflx, dflx, hr, uflxc, dflxc, hrc, duflx_dt, duflxc_dt)
+    swdflxc, swhrc, lwuflx, lwdflx, lwhr, lwuflxc, lwdflxc, lwhrc, lwduflx_dt, lwduflxc_dt)
 
 ! Modules                                              
     use rrtmg_lw_rad, only: rrtmg_lw
@@ -92,15 +92,15 @@ subroutine driver &
     real(kind=rb), intent(out) :: swhrc(ncol,nlay)        ! Clear sky shortwave radiative heating rate (K/d)
                                                 
     ! LW
-    real(kind=rb), intent(out) :: uflx(ncol,nlay+1)         ! Total sky longwave upward flux (W/m2)
-    real(kind=rb), intent(out) :: dflx(ncol,nlay+1)         ! Total sky longwave downward flux (W/m2)
-    real(kind=rb), intent(out) :: hr(ncol,nlay)           ! Total sky longwave radiative heating rate (K/d)
-    real(kind=rb), intent(out) :: uflxc(ncol,nlay+1)        ! Clear sky longwave upward flux (W/m2)
-    real(kind=rb), intent(out) :: dflxc(ncol,nlay+1)        ! Clear sky longwave downward flux (W/m2)
-    real(kind=rb), intent(out) :: hrc(ncol,nlay)          ! Clear sky longwave radiative heating rate (K/d)
+    real(kind=rb), intent(out) :: lwuflx(ncol,nlay+1)         ! Total sky longwave upward flux (W/m2)
+    real(kind=rb), intent(out) :: lwdflx(ncol,nlay+1)         ! Total sky longwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: lwhr(ncol,nlay)           ! Total sky longwave radiative heating rate (K/d)
+    real(kind=rb), intent(out) :: lwuflxc(ncol,nlay+1)        ! Clear sky longwave upward flux (W/m2)
+    real(kind=rb), intent(out) :: lwdflxc(ncol,nlay+1)        ! Clear sky longwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: lwhrc(ncol,nlay)          ! Clear sky longwave radiative heating rate (K/d)
 
-    real(kind=rb), intent(out) :: duflx_dt(ncol,nlay+1)
-    real(kind=rb), intent(out) :: duflxc_dt(ncol,nlay+1)
+    real(kind=rb), intent(out) :: lwduflx_dt(ncol,nlay+1)
+    real(kind=rb), intent(out) :: lwduflxc_dt(ncol,nlay+1)
 
     ! Local
     real(kind=rb) :: cldfmcl_sw(112,ncol,nlay)
@@ -145,7 +145,7 @@ subroutine driver &
              inflglw ,iceflglw,liqflglw,cldfmcl_lw , &
              taucmcl_lw ,ciwpmcl_lw ,clwpmcl_lw ,reicmcl_lw ,relqmcl_lw , &
              tauaer_lw  , &
-             uflx    ,dflx    ,hr      ,uflxc   ,dflxc,  hrc, &
-             duflx_dt,duflxc_dt )
+             lwuflx  ,lwdflx  ,lwhr    ,lwuflxc ,lwdflxc,  lwhrc, &
+             lwduflx_dt,lwduflxc_dt )
 
 end subroutine driver
