@@ -103,6 +103,7 @@ rrtmg_input.extend([aldif,aldir,asdif,asdir,emis])
 
 # append surface properties
 coszen = np.full((ncol),0.8,dtype=np.float64,order='F')
+#rrtmg_input.extend([coszen,1.0,1,1365.0,0,0,0,0,0,0])
 rrtmg_input.extend([coszen,1.0,1,1365.0,0,0,0,0,0,0])
 
 # append cloud properties
@@ -115,7 +116,7 @@ fsfc_sw = np.full((rrtmg.nbnd_sw,ncol,nlay),0.8,dtype=np.float64,order='F')
 rrtmg_input.extend([tauc_sw,tauc_lw,cldfrac,asmc_sw,ssac_sw,fsfc_sw])
 ciwp = np.zeros((ncol,nlay),dtype=np.float64,order='F')
 clwp = np.zeros((ncol,nlay),dtype=np.float64,order='F')
-reic = np.full((ncol,nlay),10.0,dtype=np.float64,order='F')
+reic = np.full((ncol,nlay),20.0,dtype=np.float64,order='F')
 relq = np.full((ncol,nlay),10.0,dtype=np.float64,order='F')
 rrtmg_input.extend([ciwp,clwp,reic,relq])
 
@@ -130,10 +131,25 @@ rrtmg_input.extend([tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,tauaer_lw])
 # get inputs as ordered dict
 rrtmg_input = odict(zip(rrtmg._rrtmg_inputs,rrtmg_input))
 
+rrtmg_input['clwp'][:,20] = 100
+rrtmg_input['icld'] = 2
+rrtmg_input['inflgsw'] = 2
+rrtmg_input['inflglw'] = 2
+rrtmg_input['liqflgsw'] = 1
+rrtmg_input['liqflglw'] = 1
+rrtmg_input['ciwp'][:,80] = 50
+rrtmg_input['iceflgsw'] = 1
+rrtmg_input['iceflglw'] = 1
+
 flxhr = rrtmg.calc_flxhr(**rrtmg_input)
 
 plt.plot(flxhr['swdflx'][0,:],np.arange(106))
 plt.plot(flxhr['swuflx'][0,:],np.arange(106))
 plt.plot(flxhr['lwdflx'][0,:],np.arange(106))
 plt.plot(flxhr['lwuflx'][0,:],np.arange(106))
+
+plt.plot(flxhr['swdflxc'][0,:],np.arange(106))
+plt.plot(flxhr['swuflxc'][0,:],np.arange(106))
+plt.plot(flxhr['lwdflxc'][0,:],np.arange(106))
+plt.plot(flxhr['lwuflxc'][0,:],np.arange(106))
 plt.show()

@@ -9,7 +9,7 @@ python module _rrtmg ! in
             use parkind, only: rb=>kind_rb
             real(kind=rb) intent(in) :: cpdair
         end subroutine init
-        subroutine flxhr(nbndlw,nbndsw,naerec,ncol,nlay,icld,iaer,permuteseed_sw,permuteseed_lw,irng,idrv,play,plev,tlay,tlev,tsfc,h2ovmr,o3vmr,co2vmr,ch4vmr,n2ovmr,o2vmr,cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr,aldif,aldir,asdif,asdir,emis,coszen,adjes,dyofyr,scon,inflgsw,inflglw,iceflgsw,iceflgslw,liqflgsw,liqflglw,tauc_sw,tauc_lw,cldfrac,ssac_sw,asmc_sw,fsfc_sw,ciwp,clwp,reic,relq,tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,tauaer_lw,swuflx,swdflx,swhr,swuflxc,swdflxc,swhrc,lwuflx,lwdflx,lwhr,lwuflxc,lwdflxc,lwhrc,lwduflx_dt,lwduflxc_dt) ! in :_rrtmg:_rrtmg.f90
+        subroutine flxhr(nbndlw,nbndsw,naerec,ncol,nlay,icld,iaer,permuteseed_sw,permuteseed_lw,irng,idrv,play,plev,tlay,tlev,tsfc,h2ovmr,o3vmr,co2vmr,ch4vmr,n2ovmr,o2vmr,cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr,aldif,aldir,asdif,asdir,emis,coszen,adjes,dyofyr,scon,inflgsw,inflglw,iceflgsw,iceflglw,liqflgsw,liqflglw,tauc_sw,tauc_lw,cldfrac,ssac_sw,asmc_sw,fsfc_sw,ciwp,clwp,reic,relq,tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,tauaer_lw,swuflx,swdflx,swhr,swuflxc,swdflxc,swhrc,lwuflx,lwdflx,lwhr,lwuflxc,lwdflxc,lwhrc,lwduflx_dt,lwduflxc_dt) ! in :_rrtmg:_rrtmg.f90
             use rrtmg_lw_rad, only: rrtmg_lw
             use mcica_subcol_gen_lw, only: mcica_subcol_lw
             use rrtmg_sw_init, only: rrtmg_sw_ini
@@ -55,7 +55,7 @@ python module _rrtmg ! in
             integer(kind=im) intent(in) :: inflgsw
             integer(kind=im) intent(in) :: inflglw
             integer(kind=im) intent(in) :: iceflgsw
-            integer(kind=im) intent(in) :: iceflgslw
+            integer(kind=im) intent(in) :: iceflglw
             integer(kind=im) intent(in) :: liqflgsw
             integer(kind=im) intent(in) :: liqflglw
             real(kind=8) dimension(nbndsw,ncol,nlay),intent(in),depend(ncol,nlay) :: tauc_sw

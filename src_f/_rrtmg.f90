@@ -17,7 +17,7 @@ subroutine flxhr &
     tlay, tlev, tsfc, h2ovmr, o3vmr, co2vmr, ch4vmr, n2ovmr, &
     o2vmr, cfc11vmr, cfc12vmr, cfc22vmr, ccl4vmr, aldif, aldir, asdif, &
     asdir, emis, coszen, adjes, dyofyr, scon, &
-    inflgsw, inflglw, iceflgsw, iceflgslw, liqflgsw, liqflglw, tauc_sw, tauc_lw, cldfrac, ssac_sw, asmc_sw, &
+    inflgsw, inflglw, iceflgsw, iceflglw, liqflgsw, liqflglw, tauc_sw, tauc_lw, cldfrac, ssac_sw, asmc_sw, &
     fsfc_sw, ciwp, clwp, reic, relq, &
     tauaer_sw, ssaaer_sw, asmaer_sw, ecaer_sw, tauaer_lw, &
     swuflx, swdflx, swhr, swuflxc, &
@@ -74,7 +74,7 @@ subroutine flxhr &
     integer(kind=im), intent(in) :: inflgsw
     integer(kind=im), intent(in) :: inflglw
     integer(kind=im), intent(in) :: iceflgsw
-    integer(kind=im), intent(in) :: iceflgslw
+    integer(kind=im), intent(in) :: iceflglw
     integer(kind=im), intent(in) :: liqflgsw
     integer(kind=im), intent(in) :: liqflglw
     real(kind=rb), intent(in) :: cldfrac(ncol,nlay)

@@ -28,7 +28,7 @@ _rrtmg_inputs = [
     "aldif", "aldir", "asdif", "asdir", "emis",
     "coszen", "adjes", "dyofyr",
     "scon", "inflgsw", "inflglw",
-    "iceflgsw", "iceflgslw",
+    "iceflgsw", "iceflglw",
     "liqflgsw", "liqflglw",
     "tauc_sw", "tauc_lw", "cldfrac",
     "ssac_sw", "asmc_sw","fsfc_sw",
