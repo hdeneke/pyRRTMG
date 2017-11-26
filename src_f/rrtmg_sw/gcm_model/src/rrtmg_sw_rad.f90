@@ -106,7 +106,8 @@
              taucmcl ,ssacmcl ,asmcmcl ,fsfcmcl , &
              ciwpmcl ,clwpmcl ,reicmcl ,relqmcl , &
              tauaer  ,ssaaer  ,asmaer  ,ecaer   , &
-             swuflx  ,swdflx  ,swhr    ,swuflxc ,swdflxc ,swhrc, &
+             swuflx  ,swdflx  ,swdirflx, swhr   , &
+             swuflxc ,swdflxc ,swdirflxc,  swhrc, &
 ! optional I/O
              bndsolvar,indsolvar,solcycfrac)
 
@@ -376,11 +377,15 @@
                                                       !    Dimensions: (ncol,nlay+1)
       real(kind=rb), intent(out) :: swdflx(:,:)       ! Total sky shortwave downward flux (W/m2)
                                                       !    Dimensions: (ncol,nlay+1)
+      real(kind=rb), intent(out) :: swdirflx(:,:)     ! Total sky shortwave direct downward flux (W/m2)
+                                                      !    Dimensions: (ncol,nlay+1)
       real(kind=rb), intent(out) :: swhr(:,:)         ! Total sky shortwave radiative heating rate (K/d)
                                                       !    Dimensions: (ncol,nlay)
       real(kind=rb), intent(out) :: swuflxc(:,:)      ! Clear sky shortwave upward flux (W/m2)
                                                       !    Dimensions: (ncol,nlay+1)
       real(kind=rb), intent(out) :: swdflxc(:,:)      ! Clear sky shortwave downward flux (W/m2)
+                                                      !    Dimensions: (ncol,nlay+1)
+      real(kind=rb), intent(out) :: swdirflxc(:,:)    ! Clear sky shortwave direct downward flux (W/m2)
                                                       !    Dimensions: (ncol,nlay+1)
       real(kind=rb), intent(out) :: swhrc(:,:)        ! Clear sky shortwave radiative heating rate (K/d)
                                                       !    Dimensions: (ncol,nlay)
@@ -626,8 +631,10 @@
 !  Total and clear sky fluxes
                swuflxc(iplon,i) = 0._rb
                swdflxc(iplon,i) = 0._rb
+               swdirflxc(iplon,i) = 0._rb
                swuflx(iplon,i) = 0._rb
                swdflx(iplon,i) = 0._rb
+               swdirflx(iplon,i) = 0._rb
             enddo
 
             do i = 1, nlay
@@ -821,17 +828,18 @@
             swdflxc(iplon,i) = zbbcd(i)
             swuflx(iplon,i) = zbbfu(i)
             swdflx(iplon,i) = zbbfd(i)
-            uvdflx(i) = zuvfd(i)
-            nidflx(i) = znifd(i)
+!            uvdflx(i) = zuvfd(i)
+!            nidflx(i) = znifd(i)
 !  Direct/diffuse fluxes
-            dirdflux(i) = zbbfddir(i)
-            difdflux(i) = swdflx(iplon,i) - dirdflux(i)
+            swdirflx(iplon,i) = zbbfddir(i)
+            swdirflxc(iplon,i) = zbbcddir(i)
+!            difdflux(i) = swdflx(iplon,i) - dirdflux(i)
 !  UV/visible direct/diffuse fluxes
-            dirdnuv(i) = zuvfddir(i)
-            difdnuv(i) = zuvfd(i) - dirdnuv(i)
+!            dirdnuv(i) = zuvfddir(i)
+!            difdnuv(i) = zuvfd(i) - dirdnuv(i)
 !  Near-IR direct/diffuse fluxes
-            dirdnir(i) = znifddir(i)
-            difdnir(i) = znifd(i) - dirdnir(i)
+ !           dirdnir(i) = znifddir(i)
+ !           difdnir(i) = znifd(i) - dirdnir(i)
          enddo
 
 !  Total and clear sky net fluxes

@@ -20,8 +20,8 @@ subroutine flxhr &
     inflgsw, inflglw, iceflgsw, iceflglw, liqflgsw, liqflglw, tauc_sw, tauc_lw, cldfrac, ssac_sw, asmc_sw, &
     fsfc_sw, ciwp, clwp, reic, relq, &
     tauaer_sw, ssaaer_sw, asmaer_sw, ecaer_sw, tauaer_lw, &
-    swuflx, swdflx, swhr, swuflxc, &
-    swdflxc, swhrc, lwuflx, lwdflx, lwhr, lwuflxc, lwdflxc, lwhrc, lwduflx_dt, lwduflxc_dt)
+    swuflx, swdflx, swdirflx, swhr, swuflxc, swdflxc, swdirflxc, swhrc, &
+    lwuflx, lwdflx, lwhr, lwuflxc, lwdflxc, lwhrc, lwduflx_dt, lwduflxc_dt )
 
 ! Modules                                              
     use rrtmg_lw_rad, only: rrtmg_lw
@@ -97,9 +97,11 @@ subroutine flxhr &
     ! SW
     real(kind=rb), intent(out) :: swuflx(ncol,nlay+1)       ! Total sky shortwave upward flux (W/m2)
     real(kind=rb), intent(out) :: swdflx(ncol,nlay+1)       ! Total sky shortwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: swdirflx(ncol,nlay+1)     ! Total sky shortwave direct flux (W/m2)
     real(kind=rb), intent(out) :: swhr(ncol,nlay)         ! Total sky shortwave radiative heating rate (K/d)
     real(kind=rb), intent(out) :: swuflxc(ncol,nlay+1)      ! Clear sky shortwave upward flux (W/m2)
     real(kind=rb), intent(out) :: swdflxc(ncol,nlay+1)      ! Clear sky shortwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: swdirflxc(ncol,nlay+1)      ! Clear sky shortwave direct flux (W/m2)
     real(kind=rb), intent(out) :: swhrc(ncol,nlay)        ! Clear sky shortwave radiative heating rate (K/d)
                                                 
     ! LW
@@ -144,7 +146,7 @@ subroutine flxhr &
              taucmcl_sw ,ssacmcl_sw ,asmcmcl_sw ,fsfcmcl_sw , &
              ciwpmcl_sw ,clwpmcl_sw ,reicmcl_sw ,relqmcl_sw , &
              tauaer_sw  ,ssaaer_sw ,asmaer_sw  ,ecaer_sw   , &
-             swuflx  ,swdflx  ,swhr    ,swuflxc ,swdflxc ,swhrc)
+             swuflx, swdflx, swdirflx, swhr, swuflxc ,swdflxc, swdirflxc, swhrc)
 
 ! Longwave calculations
     call mcica_subcol_lw(1, ncol, nlay, icld, permuteseed_lw, irng, play, &

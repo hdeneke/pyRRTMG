@@ -38,8 +38,8 @@ _rrtmg_inputs = [
 ]
 
 _rrtmg_outputs = [ 
-    'swuflx',  'swdflx',  'swhr',
-    'swuflxc', 'swdflxc', 'swhrc',
+    'swuflx',  'swdflx',  'swdirflx',  'swhr',
+    'swuflxc', 'swdflxc', 'swdirflxc', 'swhrc',
     'lwuflx',  'lwdflx',  'lwhr',
     'lwuflxc', 'lwdflxc', 'lwhrc'
 ]
