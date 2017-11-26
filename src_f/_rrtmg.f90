@@ -163,3 +163,113 @@ subroutine flxhr &
              lwduflx_dt,lwduflxc_dt )
 
 end subroutine flxhr
+
+
+! see _rrtm_radiation for the python that prepares these arguments...
+subroutine flxhr_sw &
+    (nbnd, naerec, ncol, nlay, icld, iaer, &
+    permuteseed, irng, idrv, play, plev, &
+    tlay, tlev, tsfc, h2ovmr, o3vmr, co2vmr, ch4vmr, n2ovmr, &
+    o2vmr, cfc11vmr, cfc12vmr, cfc22vmr, ccl4vmr, aldif, aldir, asdif, &
+    asdir, coszen, adjes, dyofyr, scon, &
+    inflag, iceflag, liqflag, tauc, cldfrac, ssac, asmc, &
+    fsfc, ciwp, clwp, reic, relq, &
+    tauaer, ssaaer, asmaer, ecaer, &
+    swuflx, swdflx, swdirflx, swhr, swuflxc, swdflxc, swdirflxc, swhrc )
+
+! Modules                                              
+    use rrtmg_sw_rad, only: rrtmg_sw
+    use parkind, only: im => kind_im
+    use mcica_subcol_gen_sw, only: mcica_subcol_sw
+    
+! Input
+    integer, parameter :: rb = selected_real_kind(12)
+    integer(kind=im), intent(in) :: nbnd
+    integer(kind=im), intent(in) :: naerec
+!     integer(kind=im), intent(in) :: iplon
+    integer(kind=im), intent(in) :: ncol
+    integer(kind=im), intent(in) :: nlay
+    integer(kind=im), intent(inout) :: icld
+    integer(kind=im), intent(inout) :: iaer
+    integer(kind=im), intent(in) :: permuteseed
+    integer(kind=im), intent(inout) :: irng
+    integer(kind=im), intent(in) :: idrv
+    real(kind=rb), intent(in) :: play(ncol,nlay)
+    real(kind=rb), intent(in) :: plev(ncol,nlay+1)
+    real(kind=rb), intent(in) :: tlay(ncol,nlay)
+    real(kind=rb), intent(in) :: tlev(ncol,nlay+1)
+    real(kind=rb), intent(in) :: tsfc(ncol)
+    real(kind=rb), intent(in) :: h2ovmr(ncol,nlay)
+    real(kind=rb), intent(in) :: o3vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: co2vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: ch4vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: n2ovmr(ncol,nlay)
+    real(kind=rb), intent(in) :: o2vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: cfc11vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: cfc12vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: cfc22vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: ccl4vmr(ncol,nlay)
+    real(kind=rb), intent(in) :: aldif(ncol)
+    real(kind=rb), intent(in) :: aldir(ncol)
+    real(kind=rb), intent(in) :: asdif(ncol)
+    real(kind=rb), intent(in) :: asdir(ncol)
+    real(kind=rb), intent(in) :: coszen(ncol)
+    real(kind=rb), intent(in) :: adjes
+    integer(kind=im), intent(in) :: dyofyr
+    real(kind=rb), intent(in) :: scon
+    integer(kind=im), intent(in) :: inflag
+    integer(kind=im), intent(in) :: iceflag
+    integer(kind=im), intent(in) :: liqflag
+    real(kind=rb), intent(in) :: cldfrac(ncol,nlay)
+    real(kind=rb), intent(in) :: tauc(nbnd,ncol,nlay)
+    real(kind=rb), intent(in) :: ssac(nbnd,ncol,nlay)
+    real(kind=rb), intent(in) :: asmc(nbnd,ncol,nlay)
+    real(kind=rb), intent(in) :: fsfc(nbnd,ncol,nlay)
+    real(kind=rb), intent(in) :: ciwp(ncol,nlay)
+    real(kind=rb), intent(in) :: clwp(ncol,nlay)
+    real(kind=rb), intent(in) :: reic(ncol,nlay)
+    real(kind=rb), intent(in) :: relq(ncol,nlay)
+    real(kind=rb), intent(in) :: tauaer(ncol,nlay,nbnd)
+    real(kind=rb), intent(in) :: ssaaer(ncol,nlay,nbnd)
+    real(kind=rb), intent(in) :: asmaer(ncol,nlay,nbnd)
+    real(kind=rb), intent(in) :: ecaer(ncol,nlay,naerec)    
+
+! Output
+    ! SW
+    real(kind=rb), intent(out) :: swuflx(ncol,nlay+1)       ! Total sky shortwave upward flux (W/m2)
+    real(kind=rb), intent(out) :: swdflx(ncol,nlay+1)       ! Total sky shortwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: swdirflx(ncol,nlay+1)     ! Total sky shortwave direct flux (W/m2)
+    real(kind=rb), intent(out) :: swhr(ncol,nlay)         ! Total sky shortwave radiative heating rate (K/d)
+    real(kind=rb), intent(out) :: swuflxc(ncol,nlay+1)      ! Clear sky shortwave upward flux (W/m2)
+    real(kind=rb), intent(out) :: swdflxc(ncol,nlay+1)      ! Clear sky shortwave downward flux (W/m2)
+    real(kind=rb), intent(out) :: swdirflxc(ncol,nlay+1)      ! Clear sky shortwave direct flux (W/m2)
+    real(kind=rb), intent(out) :: swhrc(ncol,nlay)        ! Clear sky shortwave radiative heating rate (K/d)
+                                                
+    ! Local
+    real(kind=rb) :: cldfmcl(112,ncol,nlay)
+    real(kind=rb) :: taucmcl(112,ncol,nlay)
+    real(kind=rb) :: ssacmcl(112,ncol,nlay)
+    real(kind=rb) :: asmcmcl(112,ncol,nlay)
+    real(kind=rb) :: fsfcmcl(112,ncol,nlay)
+    real(kind=rb) :: ciwpmcl(112,ncol,nlay)
+    real(kind=rb) :: clwpmcl(112,ncol,nlay)
+    real(kind=rb) :: reicmcl(ncol,nlay)
+    real(kind=rb) :: relqmcl(ncol,nlay)
+
+! Shortwave calculations
+    call mcica_subcol_sw(1, ncol, nlay, icld, permuteseed, irng, play, &
+                       cldfrac, ciwp, clwp, reic, relq, tauc, ssac, asmc, fsfc, &
+                       cldfmcl, ciwpmcl, clwpmcl, reicmcl, relqmcl, &
+                       taucmcl, ssacmcl, asmcmcl, fsfcmcl)
+    call rrtmg_sw(ncol    ,nlay    ,icld    , iaer, &
+             play    ,plev    ,tlay    ,tlev    ,tsfc   , &
+             h2ovmr , o3vmr   ,co2vmr  ,ch4vmr  ,n2ovmr ,o2vmr , &
+             asdir   ,asdif   ,aldir   ,aldif   , &
+             coszen  ,adjes   ,dyofyr  ,scon, 0, &
+             inflag ,iceflag,liqflag,cldfmcl , &
+             taucmcl ,ssacmcl ,asmcmcl ,fsfcmcl , &
+             ciwpmcl ,clwpmcl ,reicmcl ,relqmcl , &
+             tauaer  ,ssaaer ,asmaer  ,ecaer   , &
+             swuflx, swdflx, swdirflx, swhr, swuflxc ,swdflxc, swdirflxc, swhrc)
+
+end subroutine flxhr_sw
