@@ -1,2 +1,4 @@
+include *.md
+include VERSION
 recursive-include src_f *
 recursive-include examples *
