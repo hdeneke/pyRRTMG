@@ -7,7 +7,7 @@ python module _rrtmg ! in
             use rrtmg_lw_init, only: rrtmg_lw_ini
             use rrtmg_sw_init, only: rrtmg_sw_ini
             use parkind, only: rb=>kind_rb
-            real(kind=rb) intent(in) :: cpdair
+            real(kind=8) intent(in) :: cpdair
         end subroutine init
         subroutine flxhr(nbndlw,nbndsw,naerec,ncol,nlay,icld,iaer,permuteseed_sw,permuteseed_lw,irng,idrv,play,plev,tlay,tlev,tsfc,h2ovmr,o3vmr,co2vmr,ch4vmr,n2ovmr,o2vmr,cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr,aldif,aldir,asdif,asdir,emis,coszen,adjes,dyofyr,scon,inflgsw,inflglw,iceflgsw,iceflglw,liqflgsw,liqflglw,tauc_sw,tauc_lw,cldfrac,ssac_sw,asmc_sw,fsfc_sw,ciwp,clwp,reic,relq,tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,tauaer_lw,swuflx,swdflx,swdirflx,swhr,swuflxc,swdflxc,swdirflxc,swhrc,lwuflx,lwdflx,lwhr,lwuflxc,lwdflxc,lwhrc,lwduflx_dt,lwduflxc_dt) ! in :_rrtmg:_rrtmg.f90
             use rrtmg_lw_rad, only: rrtmg_lw

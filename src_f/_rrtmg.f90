@@ -4,7 +4,7 @@ subroutine init ( cpdair )
     use rrtmg_sw_init, only: rrtmg_sw_ini
     use parkind, only: rb => kind_rb
 ! Inputs
-    real(kind=rb), intent(in) :: cpdair
+    real(kind=8), intent(in) :: cpdair
 
     call rrtmg_sw_ini(cpdair)
     call rrtmg_lw_ini(cpdair)
