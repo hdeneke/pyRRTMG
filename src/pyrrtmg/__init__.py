@@ -4,6 +4,7 @@ _rrtmg.init(1005.6)
 
 nbnd_lw = 16 # number of longwave bands
 nbnd_sw = 14 # number of shortwave bands
+naer_ec =  6 # number of ECMWF aerosol types
 
 # default values for volume mixing ratios
 vmr_defaults = {
@@ -17,8 +18,9 @@ vmr_defaults = {
     'ccl4'  :  82.0e-12,   
 }
 
-_rrtmg_inputs = [
-    "icld", "iaer", "permuteseed_sw", "permuteseed_lw", 
+input_vars = [
+    "icld", "iaer", 
+    "permuteseed_sw", "permuteseed_lw", 
     "irng", "idrv",
     "play", "plev",
     "tlay", "tlev", "tsfc",
@@ -37,7 +39,7 @@ _rrtmg_inputs = [
     "ecaer_sw", "tauaer_lw"
 ]
 
-_rrtmg_outputs = [ 
+output_vars = [ 
     'swuflx',  'swdflx',  'swdirflx',  'swhr',
     'swuflxc', 'swdflxc', 'swdirflxc', 'swhrc',
     'lwuflx',  'lwdflx',  'lwhr',
@@ -48,9 +50,22 @@ def calc_flxhr(*args,**kwargs):
     '''
     Calculate fluxes and heating rates
     '''
-    if len(args)==0:
+
+    # Check inputs
+    narg = len(args)
+    if narg==0:
         # Using named arguments
-        args = [ kwargs.get(k,None) for k in _rrtmg_inputs ]
-    return dict(zip(_rrtmg_outputs,_rrtmg.flxhr(*args)))
-
-
+        if len(kwargs)==len(input_vars):
+            try:
+                args = [ kwargs[k] for k in input_vars ]
+            except KeyError:
+                raise ValueError('Missing keyword argument {0} to calc_flxhr!'.format(k))
+        else:
+                raise ValueError('Wrong number of keyword arguments to calc_flxhr!')
+    elif narg!=len(input_vars):
+        # Using argument list
+        raise ValueError('Wrong number of input arguments to calc_flxhr!')
+    # run RRTMG
+    flxhr = _rrtmg.flxhr(*args)
+    # return outputs as dict
+    return dict(zip(output_vars,flxhr))

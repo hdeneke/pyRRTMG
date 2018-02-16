@@ -129,7 +129,7 @@ tauaer_lw = np.full((ncol,nlay,rrtmg.nbnd_lw),0.0,dtype=np.float64,order='F')
 rrtmg_input.extend([tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,tauaer_lw])
 
 # get inputs as ordered dict
-rrtmg_input = odict(zip(rrtmg._rrtmg_inputs,rrtmg_input))
+rrtmg_input = odict(zip(rrtmg.input_vars,rrtmg_input))
 
 rrtmg_input['clwp'][:,20] = 100
 rrtmg_input['icld'] = 2
