@@ -88,7 +88,7 @@ python module _rrtmg ! in
             real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: lwduflx_dt
             real(kind=8) dimension(ncol,nlay + 1),intent(out),depend(ncol,nlay) :: lwduflxc_dt
         end subroutine flxhr
-        subroutine flxhr_sw(nbndsw,naerec,ncol,nlay,icld,iaer,permuteseed_sw,irng,play,plev,tlay,tlev,tsfc,h2ovmr,o3vmr,co2vmr,ch4vmr,n2ovmr,o2vmr,cfc11vmr,cfc12vmr,cfc22vmr,ccl4vmr,aldif,aldir,asdif,asdir,coszen,adjes,dyofyr,scon,inflgsw,iceflgsw,liqflgsw,tauc_sw,cldfrac,ssac_sw,asmc_sw,fsfc_sw,ciwp,clwp,reic,relq,tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,swuflx,swdflx,swdirflx,swhr,swuflxc,swdflxc,swdirflxc,swhrc) ! in :_rrtmg:_rrtmg.f90
+        subroutine flxhr_sw(nbndsw,naerec,ncol,nlay,icld,iaer,permuteseed_sw,irng,play,plev,tlay,tlev,tsfc,h2ovmr,o3vmr,co2vmr,ch4vmr,n2ovmr,o2vmr,aldif,aldir,asdif,asdir,coszen,adjes,dyofyr,scon,inflgsw,iceflgsw,liqflgsw,tauc_sw,cldfrac,ssac_sw,asmc_sw,fsfc_sw,ciwp,clwp,reic,relq,tauaer_sw,ssaaer_sw,asmaer_sw,ecaer_sw,swuflx,swdflx,swdirflx,swhr,swuflxc,swdflxc,swdirflxc,swhrc) ! in :_rrtmg:_rrtmg.f90
             use mcica_subcol_gen_sw, only: mcica_subcol_sw
             use parkind, only: im=>kind_im
             use rrtmg_sw_rad, only: rrtmg_sw
@@ -111,10 +111,6 @@ python module _rrtmg ! in
             real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: ch4vmr
             real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: n2ovmr
             real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: o2vmr
-            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: cfc11vmr
-            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: cfc12vmr
-            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: cfc22vmr
-            real(kind=8) dimension(ncol,nlay),intent(in),depend(ncol,nlay) :: ccl4vmr
             real(kind=8) dimension(ncol),intent(in),depend(ncol) :: aldif
             real(kind=8) dimension(ncol),intent(in),depend(ncol) :: aldir
             real(kind=8) dimension(ncol),intent(in),depend(ncol) :: asdif

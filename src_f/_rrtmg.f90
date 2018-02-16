@@ -167,7 +167,7 @@ subroutine flxhr_sw &
     (nbndsw, naerec, ncol, nlay, icld, iaer, &
     permuteseed_sw, irng, play, plev, &
     tlay, tlev, tsfc, h2ovmr, o3vmr, co2vmr, ch4vmr, n2ovmr, &
-    o2vmr, cfc11vmr, cfc12vmr, cfc22vmr, ccl4vmr, aldif, aldir, asdif, &
+    o2vmr, aldif, aldir, asdif, &
     asdir, coszen, adjes, dyofyr, scon, &
     inflgsw, iceflgsw, liqflgsw, tauc_sw, cldfrac, ssac_sw, asmc_sw, &
     fsfc_sw, ciwp, clwp, reic, relq, &
@@ -201,10 +201,6 @@ subroutine flxhr_sw &
     real(kind=rb), intent(in) :: ch4vmr(ncol,nlay)
     real(kind=rb), intent(in) :: n2ovmr(ncol,nlay)
     real(kind=rb), intent(in) :: o2vmr(ncol,nlay)
-    real(kind=rb), intent(in) :: cfc11vmr(ncol,nlay)
-    real(kind=rb), intent(in) :: cfc12vmr(ncol,nlay)
-    real(kind=rb), intent(in) :: cfc22vmr(ncol,nlay)
-    real(kind=rb), intent(in) :: ccl4vmr(ncol,nlay)
     real(kind=rb), intent(in) :: aldif(ncol)
     real(kind=rb), intent(in) :: aldir(ncol)
     real(kind=rb), intent(in) :: asdif(ncol)
