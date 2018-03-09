@@ -52,7 +52,8 @@ if __name__ == "__main__":
         author_email = "deneke@tropos.de",
         url = "http://sat.tropos.de/",
         packages = [ 'pyrrtmg' ],
-        package_dir = { '': 'src'},
+        package_dir = { 'pyrrtmg': 'src/pyrrtmg'},
+        data_files = [('./pyrrtmg/',['VERSION'])],
         ext_package = 'pyrrtmg',
         ext_modules = [ ext_rrtmg ],
     )

@@ -1,4 +1,5 @@
 include *.md
 include VERSION
+include src/pyrrtmg/VERSION
 recursive-include src_f *
 recursive-include examples *

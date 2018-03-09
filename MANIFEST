@@ -4,6 +4,7 @@ CHANGELOG.md
 COPYRIGHT.md
 INSTALL.md
 README.md
+VERSION
 WISHLIST.md
 setup.py
 examples/#inputs.py#
@@ -16,10 +17,12 @@ examples/input_rrtm_MLS-clr
 examples/inputs.py
 examples/optinput.py
 examples/optinput.pyc
+examples/optinput.py~
 examples/output_rrtm_MLS-clr
 examples/setup.py
 examples/test.py
 examples/test.py.bak
+examples/test.py~
 examples/test_old.py
 examples/testing.py
 src/pyrrtmg/__init__.py
