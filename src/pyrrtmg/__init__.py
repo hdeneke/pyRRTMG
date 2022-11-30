@@ -1,4 +1,4 @@
-import _rrtmg
+from pyrrtmg import _rrtmg
 import os
 
 _rrtmg.init(1005.6)
