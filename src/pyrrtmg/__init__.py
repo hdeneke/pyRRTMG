@@ -150,3 +150,6 @@ def calc_flxhr_lw(*args,**kwargs):
     flxhr = _rrtmg.flxhr_lw(*args)
     # return outputs as dict
     return dict(zip(output_vars[8:],flxhr))
+
+from . import _version
+__version__ = _version.get_versions()['version']

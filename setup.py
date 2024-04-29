@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os,glob,string,sys,shutil
-from numpy.distutils.core import setup, Extension
+from numpy.distutils.core import setup, Extension, numpy_cmdclass
 from numpy.distutils import fcompiler
 from distutils.dep_util import newer
 
@@ -38,6 +38,8 @@ def get_sources():
 
 if __name__ == "__main__":
     from numpy.distutils.core import setup
+    from versioneer import get_version, get_cmdclass
+    
     src_list = get_sources()
     ext_rrtmg = Extension( 
         name = '_rrtmg',
@@ -46,7 +48,8 @@ if __name__ == "__main__":
     )
     setup(
         name = "pyrrtmg",
-        version = open('VERSION').read().rstrip('\r\n'),
+        version = get_version(),
+        cmd_class = get_cmdclass(numpy_cmdclass),
         description = "Python Interface for RRTMG",
         author = "Hartwig Deneke",
         author_email = "deneke@tropos.de",
