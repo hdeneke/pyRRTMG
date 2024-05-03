@@ -2,7 +2,7 @@ Copyright
 
 Please note that the RRTMG_SW/RRTMG_LW sources fall under copyright by
 Atmospheric and Environmental Research, Inc. (AER, Inc.), not the
-authors of the pyRRTMG package. 
+author of the pyRRTMG package. 
 
 RRTMG_SW/RRTMG_LW Copyright and Disclaimer: 
 Copyright (c) 2002-2018, Atmospheric and Environmental Research,
@@ -12,8 +12,8 @@ each copy made. This model is provided as is without any express or
 implied warranties.
 
 The Python sources and changes to the Fortran code are copyright by
-the authors of the pyRRTMG package, and are provided under identical
-license to avoid conflicts.
+the author of the pyRRTMG package, and are licensed identically
+to avoid license conflicts.
 
 As the RRTMG_SW/LW code make up the majority of the functionality of
 the pyRRTMG package, please direct any questions regarding the
