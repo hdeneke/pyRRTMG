@@ -7,9 +7,6 @@ nbnd_lw = 16 # number of longwave bands
 nbnd_sw = 14 # number of shortwave bands
 naer_ec =  6 # number of ECMWF aerosol types
 
-with open(os.path.join(os.path.dirname(__file__),'VERSION')) as f:
-    __version__ = f.read().rstrip('\r\n')
-
 # default values for volume mixing ratios
 vmr_defaults = {
     'o2'    :    0.2046,
